@@ -2,7 +2,7 @@ import { log } from "./log.mjs";
 
 export const handler = async(event) => {
 
-    log('Execution log after Github Action. event: ' + JSON.stringify((event)))
+    log('event: ' + JSON.stringify((event)))
 
     const response = {
         statusCode: 200,
