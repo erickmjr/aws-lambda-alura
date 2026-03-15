@@ -5,7 +5,7 @@ const s3Client = new S3({ region: 'us-east-1' });
 
 export const handler = async (event) => {
 
-    const record = event.record[0];
+    const record = event.Records[0];
     const Bucket = record.s3.bucket.name;
     const Key = record.s3.bucket.key;
     const getObjectResult = await s3Client.getObject({
