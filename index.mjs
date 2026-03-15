@@ -1,16 +1,26 @@
 import { log } from "./log.mjs";
+import { S3 } from '@aws-sdk/client-s3'; 
 
-export const handler = async(event) => {
+const s3Client = new S3({ region: 'us-east-1' });
 
-    log('event: ' + JSON.stringify((event)))
+export const handler = async (event) => {
 
-    const response = {
-        statusCode: 200,
-        body: `<html><body>Request data: ${JSON.stringify(event)}</body></html>`,
-        headers: {
-            'content-type': 'text/html'
-        }
-    };
-    
-    return response;
+    const record = event.record[0];
+    const Bucket = record.s3.bucket.name;
+    const Key = record.s3.bucket.key;
+    const getObjectResult = await s3Client.getObject({
+        Bucket,
+        Key
+    });
+    const mega_byte = 1024 * 1024;
+
+    if (getObjectResult.ContentLength > mega_byte) {
+        log('Object too large');
+
+        return 'Object too large';
+    }
+
+    log('Object size ok.');
+    return 'Object size ok.';
+
 };
